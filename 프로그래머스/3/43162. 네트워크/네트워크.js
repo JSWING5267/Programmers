@@ -1,21 +1,26 @@
 function solution(n, computers) {
     let answer = 0;
-    let visit = new Array(n).fill(0)
+    const visitedNode = [];
     
-    for(i=0 ; i<n ; i++){
-        if(visit[i]===0){
-            dfs(i)
+    for (let i = 0; i < n; i++) {
+        if (visitedNode[i] !== true) {
             answer++;
+            bfs(i);
         }
-    }
-    function dfs(level){
-        for(let i=0 ; i<n ; i++){
-            if(computers[level][i]===1 && level!==i){
-                computers[level][i]=0;
-                visit[i]=1;
-                dfs(i)
-            }
-        }
-    }
+    }    
+    
     return answer;
+
+    function bfs(node) {
+        visitedNode[node] = true;
+        const q = [node];
+        while(q.length !== 0) {
+            const currentNode = q.shift();
+            computers[currentNode].forEach((isConnected, nextNodeIndex) => {
+                if (!isConnected || visitedNode[nextNodeIndex]) return;
+                visitedNode[nextNodeIndex] = true;
+                q.push(nextNodeIndex);
+            })    
+        }
+    }
 }
